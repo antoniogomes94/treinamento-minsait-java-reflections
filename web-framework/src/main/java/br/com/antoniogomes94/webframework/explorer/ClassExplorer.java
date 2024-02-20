@@ -7,11 +7,11 @@ import java.util.List;
 
 public class ClassExplorer {
 
-    public static List<String> retrieveAllCalsses(Class<?> sourceClass){
-        return packagExplorer(sourceClass.getPackageName());
+    public static List<String> retrieveAllClasses(Class<?> sourceClass){
+        return packageExplorer(sourceClass.getPackageName());
     }
 
-    private static List<String> packagExplorer(String packageName) {
+    private static List<String> packageExplorer(String packageName) {
         ArrayList<String> classNames = new ArrayList<String>();
         try {
             //dado a pasta onde tenho os pacotes do projeto com getResourceAsStream, defino raiz como package
@@ -26,7 +26,7 @@ public class ClassExplorer {
                     classNames.add(className);
                 }else {
                     //recursividade!!!
-                    classNames.addAll(packagExplorer(packageName + "." + line));
+                    classNames.addAll(packageExplorer(packageName + "." + line));
                 }
             }
             return classNames;

@@ -6,6 +6,6 @@ import br.com.antoniogomes94.webframework.web.WebFrameworkWebApplication;
 // then press Enter. You can now see whitespace characters in your code.
 public class WebFrameworkTestApplication {
     public static void main(String[] args) {
-        WebFrameworkWebApplication.run();
+        WebFrameworkWebApplication.run(WebFrameworkTestApplication.class);
     }
 }

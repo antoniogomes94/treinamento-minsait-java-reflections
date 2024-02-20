@@ -1,16 +1,18 @@
 package br.com.antoniogomes94.webframework.web;
 
+import br.com.antoniogomes94.webframework.explorer.ClassExplorer;
 import br.com.antoniogomes94.webframework.util.WebFrameworkLogger;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
 
 import java.io.File;
+import java.util.List;
 import java.util.logging.Level;
 
 public class WebFrameworkWebApplication {
 
-    public static void run() {
+    public static void run(Class<?> sourceClass) {
         //desligar todos os logs do apache tomcat
         java.util.logging.Logger.getLogger("org.apache")
                 .setLevel(java.util.logging.Level.OFF);
@@ -19,6 +21,13 @@ public class WebFrameworkWebApplication {
         WebFrameworkLogger.showBanner();
 
         try {
+            //class explorer
+            //começar a criar um método de extração de metadados:
+            List<String> allClasses = ClassExplorer.retrieveAllClasses(sourceClass);
+            allClasses.forEach(p -> {
+                WebFrameworkLogger.log("Class Explorer", "Class found: " + p);
+            });
+
             ini = System.currentTimeMillis();
 
             WebFrameworkLogger.log("Embeded Web Container", "Iniciando WebframeworkWebApplication");
