@@ -1,5 +1,9 @@
 package br.com.antoniogomes94.webframework.web;
 
+import br.com.antoniogomes94.webframework.annotations.WebframeworkGetMethod;
+import br.com.antoniogomes94.webframework.annotations.WebframeworkPostMethod;
+import br.com.antoniogomes94.webframework.datastructures.ControllerMap;
+import br.com.antoniogomes94.webframework.datastructures.RequestControllerData;
 import br.com.antoniogomes94.webframework.explorer.ClassExplorer;
 import br.com.antoniogomes94.webframework.util.WebFrameworkLogger;
 import org.apache.catalina.Context;
@@ -7,8 +11,9 @@ import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
 
 import java.io.File;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.List;
-import java.util.logging.Level;
 
 public class WebFrameworkWebApplication {
 
@@ -21,12 +26,15 @@ public class WebFrameworkWebApplication {
         WebFrameworkLogger.showBanner();
 
         try {
+
             //class explorer
             //começar a criar um método de extração de metadados:
-            List<String> allClasses = ClassExplorer.retrieveAllClasses(sourceClass);
-            allClasses.forEach(p -> {
-                WebFrameworkLogger.log("Class Explorer", "Class found: " + p);
-            });
+			/*
+			List<String> allClasses = ClassExplorer.retrieveAllCalsses(sourceClass);
+			allClasses.forEach(p -> {
+				WebFrameworkLogger.log("Class Explorer", "Class found: " + p);
+			});*/
+            extractMetadata(sourceClass);
 
             ini = System.currentTimeMillis();
 
@@ -56,6 +64,57 @@ public class WebFrameworkWebApplication {
             tomcat.getServer().await();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+
+    }
+
+    private static void extractMetadata(Class<?> sourceClass) {
+        try {
+            List<String> allClasses = ClassExplorer.retrieveAllClasses(sourceClass);
+            for(String classe : allClasses) {
+                //recuperar as anotações da classe
+                Annotation annotations[] = Class.forName(classe).getAnnotations();
+                for (Annotation classAnnotation : annotations) {
+                    if(classAnnotation.annotationType().getName()
+                            .equals("br.com.ehmf.webframework.annotations.WebframeworkController")) {
+                        WebFrameworkLogger.log("Metadata Explorer", "Found a Controller: " + classe);
+                        extractMethods(classe);
+                    }
+                }
+            }
+            for(RequestControllerData item : ControllerMap.values.values()) {
+                WebFrameworkLogger.log("", "     " + item.getHttpMethod() + ":" + item.getUrl() +
+                        " [" + item.getControllerClass() + "." + item.getControllerMethod() + "]"
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void extractMethods(String className) throws Exception {
+        String httpMethod = "";
+        String path = "";
+
+        //recuperar todos os métodos da classe
+        for(Method method : Class.forName(className).getDeclaredMethods()) {
+            //WebFrameworkLogger.log(" - ", method.getName());
+            for(Annotation annotation : method.getAnnotations()) {
+                if(annotation.annotationType().getName()
+                        .equals("br.com.ehmf.webframework.annotations.WebframeworkGetMethod")) {
+                    httpMethod = "GET";
+                    path = ((WebframeworkGetMethod)annotation).value();
+                }else if(annotation.annotationType().getName()
+                        .equals("br.com.ehmf.webframework.annotations.WebframeworkPostMethod")) {
+                    httpMethod = "POST";
+                    path = ((WebframeworkPostMethod)annotation).value();
+                }
+            }
+            //WebFrameworkLogger.log(" - ", httpMethod + " " + path);
+            RequestControllerData getData =
+                    new RequestControllerData(httpMethod, path, className, method.getName());
+            ControllerMap.values.put(httpMethod + path, getData);
         }
     }
 }
