@@ -1,13 +1,14 @@
 package org.br.com.antoniogomes94.webapplication.controller;
 
-import br.com.antoniogomes94.webframework.annotations.WebframeworkBody;
-import br.com.antoniogomes94.webframework.annotations.WebframeworkController;
-import br.com.antoniogomes94.webframework.annotations.WebframeworkGetMethod;
-import br.com.antoniogomes94.webframework.annotations.WebframeworkPostMethod;
+import br.com.antoniogomes94.webframework.annotations.*;
 import org.br.com.antoniogomes94.webapplication.model.Produto;
+import org.br.com.antoniogomes94.webapplication.service.Service;
 
 @WebframeworkController
 public class HelloController {
+
+    @WebframeworkInject
+    private Service iService;
 
     @WebframeworkGetMethod("/hello")
     public String returnHelloWorld() {
@@ -29,5 +30,10 @@ public class HelloController {
     @WebframeworkGetMethod("/teste")
     public String teste() {
         return "Testes";
+    }
+
+    @WebframeworkGetMethod("/injected")
+    public String chamadaCustom() {
+        return iService.chamadaCustom("Hello injected");
     }
 }

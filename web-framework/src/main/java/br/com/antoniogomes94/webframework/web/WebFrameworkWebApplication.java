@@ -4,6 +4,7 @@ import br.com.antoniogomes94.webframework.annotations.WebframeworkGetMethod;
 import br.com.antoniogomes94.webframework.annotations.WebframeworkPostMethod;
 import br.com.antoniogomes94.webframework.datastructures.ControllerMap;
 import br.com.antoniogomes94.webframework.datastructures.RequestControllerData;
+import br.com.antoniogomes94.webframework.datastructures.ServiceImplementationMap;
 import br.com.antoniogomes94.webframework.explorer.ClassExplorer;
 import br.com.antoniogomes94.webframework.util.WebFrameworkLogger;
 import org.apache.catalina.Context;
@@ -80,6 +81,13 @@ public class WebFrameworkWebApplication {
                             .equals("br.com.ehmf.webframework.annotations.WebframeworkController")) {
                         WebFrameworkLogger.log("Metadata Explorer", "Found a Controller: " + classe);
                         extractMethods(classe);
+                    }else if(classAnnotation.annotationType().getName()
+                            .equals("br.com.ehmf.webframework.annotations.WebframeworkService")) {
+                        WebFrameworkLogger.log("Metadata Explorer", "Found a Service Implementation: " + classe);
+                        for(Class<?> interfaceWeb : Class.forName(classe).getInterfaces()) {
+                            WebFrameworkLogger.log("Metadata Explorer", "     Class implements" + interfaceWeb.getName());
+                            ServiceImplementationMap.implementations.put(interfaceWeb.getName(), classe);
+                        }
                     }
                 }
             }
@@ -88,7 +96,6 @@ public class WebFrameworkWebApplication {
                         " [" + item.getControllerClass() + "." + item.getControllerMethod() + "]"
                 );
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
