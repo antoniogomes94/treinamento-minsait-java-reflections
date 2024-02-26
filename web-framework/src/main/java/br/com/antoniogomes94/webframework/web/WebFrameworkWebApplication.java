@@ -96,6 +96,7 @@ public class WebFrameworkWebApplication {
                         " [" + item.getControllerClass() + "." + item.getControllerMethod() + "]"
                 );
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
