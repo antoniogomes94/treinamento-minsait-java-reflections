@@ -8,7 +8,7 @@ import org.br.com.antoniogomes94.webapplication.service.Service;
 public class HelloController {
 
     @WebframeworkInject
-    private Service iService;
+    private Service service;
 
     @WebframeworkGetMethod("/hello")
     public String returnHelloWorld() {
@@ -34,6 +34,12 @@ public class HelloController {
 
     @WebframeworkGetMethod("/injected")
     public String chamadaCustom() {
-        return iService.chamadaCustom("Hello injected");
+        return service.chamadaCustom("Hello injected");
+    }
+
+    //http://localhost:8080/retornavalor/OI == Retornando o valor de parametro: 22222
+    @WebframeworkGetMethod("/retornavalor/{valor}")
+    public String retornoValor(@WebframeworkPathVariable Double valor) {
+        return "Retornando o valor de parametro: " + valor;
     }
 }
