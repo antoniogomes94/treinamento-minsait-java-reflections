@@ -80,11 +80,11 @@ public class WebFrameworkWebApplication {
                 Annotation annotations[] = Class.forName(classe).getAnnotations();
                 for (Annotation classAnnotation : annotations) {
                     if(classAnnotation.annotationType().getName()
-                            .equals("br.com.ehmf.webframework.annotations.WebframeworkController")) {
+                            .equals("br.com.antoniogomes94.webframework.annotations.WebframeworkController")) {
                         WebFrameworkLogger.log("Metadata Explorer", "Found a Controller: " + classe);
                         extractMethods(classe);
                     }else if(classAnnotation.annotationType().getName()
-                            .equals("br.com.ehmf.webframework.annotations.WebframeworkService")) {
+                            .equals("br.com.antoniogomes94.webframework.annotations.WebframeworkService")) {
                         WebFrameworkLogger.log("Metadata Explorer", "Found a Service Implementation: " + classe);
                         for(Class<?> interfaceWeb : Class.forName(classe).getInterfaces()) {
                             WebFrameworkLogger.log("Metadata Explorer", "     Class implements" + interfaceWeb.getName());
@@ -116,7 +116,7 @@ public class WebFrameworkWebApplication {
             //WebFrameworkLogger.log(" - ", method.getName());
             for(Annotation annotation : method.getAnnotations()) {
                 if(annotation.annotationType().getName()
-                        .equals("br.com.ehmf.webframework.annotations.WebframeworkGetMethod")) {
+                        .equals("br.com.antoniogomes94.webframework.annotations.WebframeworkGetMethod")) {
                     httpMethod = "GET";
                     path = ((WebframeworkGetMethod)annotation).value();
 
@@ -129,7 +129,7 @@ public class WebFrameworkWebApplication {
                     }
 
                 }else if(annotation.annotationType().getName()
-                        .equals("br.com.ehmf.webframework.annotations.WebframeworkPostMethod")) {
+                        .equals("br.com.antoniogomes94.webframework.annotations.WebframeworkPostMethod")) {
                     httpMethod = "POST";
                     path = ((WebframeworkPostMethod)annotation).value();
 
@@ -145,7 +145,7 @@ public class WebFrameworkWebApplication {
                 // M�todos PUT E DELETE para Desafio Minsait
                 // Segue a mesma logica dos demais
                 else if(annotation.annotationType().getName()
-                        .equals("br.com.ehmf.webframework.annotations.WebframeworkPutMethod")) {
+                        .equals("br.com.antoniogomes94.webframework.annotations.WebframeworkPutMethod")) {
                     httpMethod = "PUT";
                     path = ((WebframeworkPutMethod)annotation).value();
 
@@ -157,7 +157,7 @@ public class WebFrameworkWebApplication {
                             parameter = methodParam.getParam();
                     }
                 }else if(annotation.annotationType().getName()
-                        .equals("br.com.ehmf.webframework.annotations.WebframeworkDeleteMethod")) {
+                        .equals("br.com.antoniogomes94.webframework.annotations.WebframeworkDeleteMethod")) {
                     httpMethod = "DELETE";
                     path = ((WebframeworkDeleteMethod)annotation).value();
 

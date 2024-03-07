@@ -83,7 +83,7 @@ public class WebFrameworkDispatcherServlet extends HttpServlet {
 				Object arg;
 				Parameter parameter = controllerMethod.getParameters()[0];
 				if(parameter.getAnnotations()[0].annotationType().getName()
-						.equals("br.com.ehmf.webframework.annotations.WebframeworkBody")) {
+						.equals("br.com.antoniogomes94.webframework.annotations.WebframeworkBody")) {
 
 					WebFrameworkLogger.log("", "     Procurando parâmetro da requisição do tipo "
 							+ parameter.getType().getName());
@@ -107,7 +107,7 @@ public class WebFrameworkDispatcherServlet extends HttpServlet {
                 for(Parameter parameter : parameters) {
                     for(Annotation annotation : parameter.getAnnotations()) {
                         if(annotation.annotationType().getName()
-                                .equals("br.com.ehmf.webframework.annotations.WebframeworkBody")) {
+                                .equals("br.com.antoniogomes94.webframework.annotations.WebframeworkBody")) {
                             WebFrameworkLogger.log("", "     Procurando parâmetro da requisição do tipo "
                                     + parameter.getType().getName());
                             String body = readBytesFromRequest(req);
@@ -119,7 +119,7 @@ public class WebFrameworkDispatcherServlet extends HttpServlet {
 
 
                         }else if(annotation.annotationType().getName()
-                                .equals("br.com.ehmf.webframework.annotations.WebframeworkPathVariable")) {
+                                .equals("br.com.antoniogomes94.webframework.annotations.WebframeworkPathVariable")) {
                             WebFrameworkLogger.log("", "     Procurando parâmetro da requisição do tipo "
                                     + parameter.getType().getName());
                             WebFrameworkLogger.log("", "     Conteúdo do parâmetro: "
