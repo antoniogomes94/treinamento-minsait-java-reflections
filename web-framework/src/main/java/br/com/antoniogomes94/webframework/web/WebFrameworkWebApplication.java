@@ -1,7 +1,9 @@
 package br.com.antoniogomes94.webframework.web;
 
+import br.com.antoniogomes94.webframework.annotations.WebframeworkDeleteMethod;
 import br.com.antoniogomes94.webframework.annotations.WebframeworkGetMethod;
 import br.com.antoniogomes94.webframework.annotations.WebframeworkPostMethod;
+import br.com.antoniogomes94.webframework.annotations.WebframeworkPutMethod;
 import br.com.antoniogomes94.webframework.datastructures.ControllerMap;
 import br.com.antoniogomes94.webframework.datastructures.MethodParam;
 import br.com.antoniogomes94.webframework.datastructures.RequestControllerData;
@@ -68,8 +70,6 @@ public class WebFrameworkWebApplication {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
     private static void extractMetadata(Class<?> sourceClass) {
@@ -141,6 +141,35 @@ public class WebFrameworkWebApplication {
                             parameter = methodParam.getParam();
                     }
                 }
+
+                // M�todos PUT E DELETE para Desafio Minsait
+                // Segue a mesma logica dos demais
+                else if(annotation.annotationType().getName()
+                        .equals("br.com.ehmf.webframework.annotations.WebframeworkPutMethod")) {
+                    httpMethod = "PUT";
+                    path = ((WebframeworkPutMethod)annotation).value();
+
+                    //verificar se existe parâmetro no path.
+                    MethodParam methodParam = WebFrameworkUtil.convertURI2MethodParam(path);
+                    if(methodParam != null) {
+                        path = methodParam.getMethod();
+                        if(methodParam.getParam() != null)
+                            parameter = methodParam.getParam();
+                    }
+                }else if(annotation.annotationType().getName()
+                        .equals("br.com.ehmf.webframework.annotations.WebframeworkDeleteMethod")) {
+                    httpMethod = "DELETE";
+                    path = ((WebframeworkDeleteMethod)annotation).value();
+
+                    //verificar se existe parâmetro no path.
+                    MethodParam methodParam = WebFrameworkUtil.convertURI2MethodParam(path);
+                    if(methodParam != null) {
+                        path = methodParam.getMethod();
+                        if(methodParam.getParam() != null)
+                            parameter = methodParam.getParam();
+                    }
+                }
+
             }
             //WebFrameworkLogger.log(" - CHAVE: ", httpMethod + path);
             RequestControllerData getData =
